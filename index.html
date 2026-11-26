@@ -21,7 +21,7 @@
   --bg:#D9EEFB; --surface:#FFFFFF; --ink:#12202B; --muted:#5B6975; --line:#BFD9EA;
   --accent:#0B5D6B; --accent-ink:#FFFFFF;
   --risk:#B3372B; --risk-bg:#FBE9E6; --opp:#1E7A4C; --opp-bg:#E3F3EA; --watch:#96690A; --watch-bg:#FAF0D7;
-  --c-me:#0B5D6B; --c-af:#A6541B; --c-as:#8A2F4E; --c-ec:#2F6B2E; --c-us:#27458F; --c-eu:#5A3F8E; --c-te:#3A4A57; --c-uae:#1D2F3F;
+  --c-me:#0B5D6B; --c-af:#A6541B; --c-as:#8A2F4E; --c-ec:#2F6B2E; --c-us:#27458F; --c-eu:#5A3F8E; --c-te:#3A4A57; --c-uae:#1D2F3F; --c-ir:#857410;
   --display:"Noto Kufi Arabic","IBM Plex Sans Arabic",Tahoma,sans-serif;
   --body:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;
 }
@@ -50,6 +50,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.45}
 .tile{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:10px;min-width:0}
 .tile:hover{border-color:var(--muted)}
 .tile:first-child{grid-column:1 / -1}
+.grid .tile:last-child:nth-child(even){grid-column:1 / -1}
 .tile.wide{flex-direction:row;align-items:center;gap:14px}
 .tile.wide>div{display:flex;flex-direction:column;gap:4px;min-width:0}
 .tile .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -96,7 +97,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.45}
 
 <script>
 (function(){
-  var COLORS={"middle-east":"--c-me","africa":"--c-af","asia":"--c-as","economy":"--c-ec","america":"--c-us","europe":"--c-eu","technology":"--c-te","uae-image":"--c-uae"};
+  var COLORS={"middle-east":"--c-me","africa":"--c-af","asia":"--c-as","economy":"--c-ec","america":"--c-us","europe":"--c-eu","technology":"--c-te","uae-image":"--c-uae","iran":"--c-ir"};
   var S='fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
   var ICONS={
     "middle-east":'<svg viewBox="0 0 28 28" '+S+'><rect x="7" y="7" width="14" height="14"/><rect x="7" y="7" width="14" height="14" transform="rotate(45 14 14)"/><circle cx="14" cy="14" r="2.4"/></svg>',
@@ -108,6 +109,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.45}
     "technology":'<svg viewBox="0 0 28 28" '+S+'><rect x="8" y="8" width="12" height="12" rx="2"/><rect x="11.500" y="11.500" width="5" height="5"/><path d="M11 4v4M17 4v4M11 20v4M17 20v4M4 11h4M4 17h4M20 11h4M20 17h4"/></svg>'
   };
   ICONS["uae-image"]='<svg viewBox="0 0 28 28" '+S+'><path d="M5 6h15v16H7a2 2 0 0 1-2-2z"/><path d="M20 10h3v10a2 2 0 0 1-2 2"/><path d="M8.500 10h8M8.500 14h8M8.500 18h5"/></svg>';
+  ICONS["iran"]='<svg viewBox="0 0 28 28" '+S+'><path d="M5 24V13c0-5 4-7 9-10 5 3 9 5 9 10v11"/><path d="M10 24v-8c0-2 2-3 4-4.500 2 1.500 4 2.500 4 4.500v8"/><path d="M3 24h22"/></svg>';
   var MONTHS=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
   function fdate(s){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||"");return m?(parseInt(m[3],10)+" "+MONTHS[parseInt(m[2],10)-1]+" "+m[1]):""}
   function src(d){var t=fdate(d.date);return '<div class="src"><span>المصدر: <bdi><a href="'+esc(d.url)+'" target="_blank" rel="noopener">'+esc(d.source)+'</a></bdi></span>'+(t?'<bdi>'+t+'</bdi>':'')+'</div>'}
