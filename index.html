@@ -68,6 +68,8 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.45}
 .sec{display:flex;flex-direction:column;gap:12px}
 .sec>h2{font-size:16px;display:flex;align-items:center;gap:8px}
 .sec>h2::before{content:"";width:4px;height:18px;border-radius:2px;background:var(--scene,var(--accent))}
+.sec>h2.big{font-size:21px}
+.sec>h2.big::before{height:24px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
 .devs{display:flex;flex-direction:column;gap:10px}
 .dev h3{font-size:15px;font-family:var(--body);font-weight:600;line-height:1.6}
@@ -138,7 +140,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.45}
     h+='</div></section><section class="sec"><h2>الانعكاس على المصالح الإماراتية</h2><div class="card imps">';
     s.implications.forEach(function(m){h+='<div class="imp"><span class="tag '+m.type+'">'+TAG[m.type]+'</span><span>'+esc(m.text)+'</span></div>'});
     h+='</div><p class="note">تقدير تحليلي، لا خبر.</p></section>';
-    h+='<section class="sec"><h2>منتجات مقترحة للقطاع</h2><div class="prods">';
+    h+='<section class="sec"><h2 class="big">منتجات مقترحة للقطاع</h2><div class="prods">';
     s.products.forEach(function(p){h+='<div class="prod"><b>'+esc(p.kind)+'</b>'+esc(p.title)+'</div>'});
     h+='</div></section>';
     h+='<nav class="nav" aria-label="التنقل بين المشاهد"><a href="#'+prev.id+'"><small>السابق</small>'+esc(prev.short)+'</a><a href="#'+next.id+'"><small>التالي</small>'+esc(next.short)+'</a></nav>';
