@@ -97,7 +97,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.45}
 
 <script>
 (function(){
-  var COLORS={"middle-east":"--c-me","africa":"--c-af","asia":"--c-as","economy":"--c-ec","america":"--c-us","europe":"--c-eu","technology":"--c-te","uae-image":"--c-uae","iran":"--c-ir"};
+  var COLORS={"middle-east":"--c-me","africa":"--c-af","asia":"--c-as","economy":"--c-ec","america":"--c-us","europe":"--c-eu","technology":"--c-te","uae-image":"--c-uae","iran":"--c-ir","events":"--accent"};
   var S='fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
   var ICONS={
     "middle-east":'<svg viewBox="0 0 28 28" '+S+'><rect x="7" y="7" width="14" height="14"/><rect x="7" y="7" width="14" height="14" transform="rotate(45 14 14)"/><circle cx="14" cy="14" r="2.4"/></svg>',
@@ -110,6 +110,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.45}
   };
   ICONS["uae-image"]='<svg viewBox="0 0 28 28" '+S+'><path d="M5 6h15v16H7a2 2 0 0 1-2-2z"/><path d="M20 10h3v10a2 2 0 0 1-2 2"/><path d="M8.500 10h8M8.500 14h8M8.500 18h5"/></svg>';
   ICONS["iran"]='<svg viewBox="0 0 28 28" '+S+'><path d="M5 24V13c0-5 4-7 9-10 5 3 9 5 9 10v11"/><path d="M10 24v-8c0-2 2-3 4-4.500 2 1.500 4 2.500 4 4.500v8"/><path d="M3 24h22"/></svg>';
+  ICONS["events"]='<svg viewBox="0 0 28 28" '+S+'><rect x="4.500" y="6.500" width="19" height="17" rx="2.500"/><path d="M4.500 11.500h19M9.500 4v5M18.500 4v5M14 14.500v6M11 17.500h6"/></svg>';
   var MONTHS=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
   function fdate(s){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||"");return m?(parseInt(m[3],10)+" "+MONTHS[parseInt(m[2],10)-1]+" "+m[1]):""}
   function src(d){var t=fdate(d.date);return '<div class="src"><span>المصدر: <bdi><a href="'+esc(d.url)+'" target="_blank" rel="noopener">'+esc(d.source)+'</a></bdi></span>'+(t?'<bdi>'+t+'</bdi>':'')+'</div>'}
@@ -126,6 +127,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.45}
     data.signals.forEach(function(s){h+='<li><a href="#'+s.scene+'">'+esc(s.text)+'</a></li>'});
     h+='</ol></section>';
     if(data.uaeImage){var u=data.uaeImage;h+='<a class="tile wide" href="#uae-image">'+icon("uae-image")+'<div><h3>'+esc(u.name)+'</h3><p>'+esc(u.headline)+'</p></div></a>';}
+    h+='<a class="tile wide" href="https://claude.ai/artifact/8oj4WWw1s1kPxwkZxVkWyy" target="_blank" rel="noopener">'+icon("events")+'<div><h3>مقترحات الفعاليات</h3><p>أدخل خبرًا أو حدثًا لصياغة مقترح ويبنار أو محاضرة أو ندوة</p></div></a>';
     h+='<nav class="grid" aria-label="المشاهد">';
     data.scenes.forEach(function(s){
       h+='<a class="tile" href="#'+s.id+'"><div class="row">'+icon(s.id)+'</div><h3>'+esc(s.name)+'</h3><p>'+esc(s.headline)+'</p></a>';
