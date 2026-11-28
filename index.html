@@ -7,6 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="المشاهد">
+<meta name="color-scheme" content="only light">
 <meta name="theme-color" content="#D9EEFB">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon-v3.png">
@@ -17,7 +18,7 @@
 <style>
 /* Layout idea: a phone home screen of seven scene tiles; each opens a single reading column. */
 :root{
-  color-scheme:light;
+  color-scheme:only light;
   --bg:#D9EEFB; --surface:#FFFFFF; --ink:#12202B; --muted:#5B6975; --line:#BFD9EA;
   --accent:#0B5D6B; --accent-ink:#FFFFFF;
   --risk:#B3372B; --risk-bg:#FBE9E6; --opp:#1E7A4C; --opp-bg:#E3F3EA; --watch:#96690A; --watch-bg:#FAF0D7;
@@ -27,6 +28,7 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0}
+html{background:#D9EEFB}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.75;-webkit-text-size-adjust:100%}
 a{color:var(--accent)}
 button{font:inherit;color:inherit}
