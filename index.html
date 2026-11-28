@@ -66,6 +66,17 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.45}
 .icon svg{width:28px;height:28px}
 .tile h3{font-size:17px}
 .tile p{margin:0;font-size:14px;line-height:1.65;color:var(--muted)}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.palette{flex:none;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;cursor:pointer;padding:0;color:var(--accent)}
+.palette svg{width:24px;height:24px}
+.themes{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.themes[hidden]{display:none}
+.themes b{font-size:14px;color:var(--muted);font-weight:600}
+.swatches{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 10px}
+.swatch{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:0;cursor:pointer;font-size:12px;color:var(--muted);min-width:48px}
+.swatch i{width:44px;height:44px;border-radius:50%;border:2px solid var(--line);display:block}
+.swatch[aria-pressed="true"] i{border-color:var(--accent);box-shadow:0 0 0 2px var(--surface) inset}
+.swatch[aria-pressed="true"]{color:var(--ink);font-weight:600}
 .foot{color:var(--muted);font-size:13px;line-height:1.7;border-top:1px solid var(--line);padding-top:14px}
 
 /* Scene */
@@ -126,12 +137,53 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.45}
   var TAG={risk:"مخاطرة",opp:"فرصة",watch:"مراقبة"};
   var app=document.getElementById("app"), data=null;
 
+  /* Background colour chooser: light backgrounds only, so text and cards keep their contrast. */
+  var THEMES=[
+    {id:"sky",name:"سماوي",bg:"#D9EEFB",line:"#BFD9EA"},
+    {id:"white",name:"أبيض",bg:"#FFFFFF",line:"#D5DEE5"},
+    {id:"sand",name:"رملي",bg:"#F5EBDD",line:"#E2D2BC"},
+    {id:"mint",name:"أخضر فاتح",bg:"#DFF3E8",line:"#BFDDCB"},
+    {id:"rose",name:"وردي فاتح",bg:"#F9E6E8",line:"#E8C9CD"},
+    {id:"gray",name:"رمادي فاتح",bg:"#E9EDF0",line:"#CCD5DB"}
+  ];
+  var theme="sky", themesOpen=false;
+  try{theme=localStorage.getItem("scene-bg")||"sky"}catch(e){}
+  function applyTheme(id){
+    var t=THEMES[0];
+    THEMES.forEach(function(x){if(x.id===id)t=x});
+    theme=t.id;
+    var r=document.documentElement;
+    r.style.setProperty("--bg",t.bg); r.style.setProperty("--line",t.line);
+    r.style.background=t.bg; document.body.style.background=t.bg;
+    var m=document.querySelector('meta[name="theme-color"]'); if(m)m.setAttribute("content",t.bg);
+    try{localStorage.setItem("scene-bg",t.id)}catch(e){}
+  }
+  applyTheme(theme);
+  var PALETTE='<svg viewBox="0 0 28 28" '+S+'><path d="M14 4a10 10 0 1 0 0 20c1.700 0 2.500-1 2.500-2.200 0-1.500-1.200-2-1.200-3.300 0-1.200 1-2 2.200-2H20a4 4 0 0 0 4-4c0-4.700-4.500-8.500-10-8.500z"/><circle cx="9.500" cy="12" r="1.200"/><circle cx="13.500" cy="8.500" r="1.200"/><circle cx="18.500" cy="10" r="1.200"/></svg>';
+  function paletteBtn(){return '<button type="button" class="palette" data-palette aria-label="تغيير لون الخلفية" aria-expanded="'+themesOpen+'" aria-controls="themes">'+PALETTE+'</button>'}
+  function themePanel(){
+    var h='<section class="themes" id="themes"'+(themesOpen?'':' hidden')+'><b>لون الخلفية</b><div class="swatches">';
+    THEMES.forEach(function(t){h+='<button type="button" class="swatch" data-bg="'+t.id+'" aria-pressed="'+(t.id===theme)+'"><i style="background:'+t.bg+'"></i>'+t.name+'</button>'});
+    return h+'</div></section>';
+  }
+  app.addEventListener("click",function(e){
+    var el=e.target.closest?e.target.closest("[data-palette],[data-bg]"):null; if(!el)return;
+    var panel=document.getElementById("themes");
+    if(el.hasAttribute("data-palette")){
+      themesOpen=!themesOpen; el.setAttribute("aria-expanded",themesOpen);
+      if(panel)panel.hidden=!themesOpen;
+    }else{
+      applyTheme(el.getAttribute("data-bg"));
+      [].forEach.call(panel.querySelectorAll("[data-bg]"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-bg")===theme)});
+    }
+  });
+
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
   function icon(id){return '<span class="icon" style="background:var('+COLORS[id]+')" aria-hidden="true">'+ICONS[id]+'</span>'}
   function byId(id){for(var i=0;i<data.scenes.length;i++)if(data.scenes[i].id===id)return i;return -1}
 
   function home(){
-    var h='<header class="top"><div class="meta"><span>'+esc(data.dateLabel)+'</span><span>'+esc(data.asOf)+'</span><span class="badge">'+esc(data.edition)+'</span></div><h1>المشاهد الاستراتيجية اليومية</h1></header>';
+    var h='<header class="top"><div class="meta"><span>'+esc(data.dateLabel)+'</span><span>'+esc(data.asOf)+'</span><span class="badge">'+esc(data.edition)+'</span></div><div class="toprow"><h1>المشاهد الاستراتيجية اليومية</h1>'+paletteBtn()+'</div></header>'+themePanel();
     h+='<section class="signals"><h2>ثلاث إشارات تستحق انتباهك اليوم</h2><ol>';
     data.signals.forEach(function(s){h+='<li><a href="#'+s.scene+'">'+esc(s.text)+'</a></li>'});
     h+='</ol></section>';
@@ -148,7 +200,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.45}
 
   function scene(i){
     var s=data.scenes[i], n=data.scenes.length, prev=data.scenes[(i-1+n)%n], next=data.scenes[(i+1)%n];
-    var h='<div class="bar"><a class="back" href="#home">→ كل المشاهد</a></div>';
+    var h='<div class="bar"><a class="back" href="#home">→ كل المشاهد</a>'+paletteBtn()+'</div>'+themePanel();
     h+='<header class="hero">'+icon(s.id)+'<div><h1>'+esc(s.name)+'</h1><div class="sub">'+esc(data.dateLabel)+'</div></div></header>';
     h+='<p class="lead">'+esc(s.headline)+'</p><p style="margin:0">'+esc(s.summary)+'</p>';
     h+='<section class="sec"><h2>أبرز التطورات</h2><div class="devs">';
@@ -168,7 +220,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.45}
 
   function uae(){
     var u=data.uaeImage;
-    var h='<div class="bar"><a class="back" href="#home">→ الرئيسية</a></div>';
+    var h='<div class="bar"><a class="back" href="#home">→ الرئيسية</a>'+paletteBtn()+'</div>'+themePanel();
     h+='<header class="hero">'+icon("uae-image")+'<div><h1>'+esc(u.name)+'</h1><div class="sub">في الصحافة العالمية · '+esc(data.dateLabel)+'</div></div></header>';
     h+='<p class="lead">'+esc(u.headline)+'</p><p style="margin:0">'+esc(u.summary)+'</p>';
     h+='<section class="sec"><h2>أبرز ما نُشر عن الإمارات</h2><div class="devs">';
